@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Directory</title>
+  <style>
+    :root {
+      --primary-color: #4b6cb7;
+      --secondary-color: #182848;
+      --text-color: #333;
+      --light-bg: #ffffff;
+      --hover-glow: rgba(75, 108, 183, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #4b6cb7, #182848);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      color: var(--text-color);
+    }
+
+    h1 {
+      margin-bottom: 2rem;
+      color: #fff;
+      font-size: 2.8rem;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-box, .add-box {
+      margin-bottom: 2rem;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    input[type="text"], input[type="submit"] {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      margin-bottom: 1rem;
+    }
+
+    input[type="submit"] {
+      background-color: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .directory {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+      width: 100%;
+      max-width: 1300px;
+    }
+
+    .card {
+      background-color: var(--light-bg);
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      padding: 2rem 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0;
+      background: var(--hover-glow);
+      z-index: 0;
+      transition: 0.3s ease;
+    }
+
+    .card:hover::before {
+      width: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+    }
+
+    .card h3 {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 0.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card p {
+      color: #555;
+      font-size: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .directory {
+        grid-template-columns: 1fr;
+      }
+
+      input[type="text"] {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Member Directory</h1>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search members..." onkeyup="filterMembers()" />
+  </div>
+
+  <div class="add-box">
+    <input type="text" id="newName" placeholder="Enter name" />
+    <input type="text" id="newRole" placeholder="Enter role" />
+    <input type="submit" value="Add Member" onclick="addMember()" />
+  </div>
+
+  <div class="directory" id="directory">
+    <div class="card"><h3>Alice Johnson</h3><p>Frontend Developer</p></div>
+    <div class="card"><h3>Bob Smith</h3><p>Backend Engineer</p></div>
+    <div class="card"><h3>Carol Williams</h3><p>UI/UX Designer</p></div>
+    <div class="card"><h3>David Brown</h3><p>DevOps Specialist</p></div>
+    <div class="card"><h3>Emily Davis</h3><p>Project Manager</p></div>
+    <div class="card"><h3>Frank Thomas</h3><p>Security Analyst</p></div>
+    <div class="card"><h3>Grace Lee</h3><p>Machine Learning Engineer</p></div>
+    <div class="card"><h3>Henry Wilson</h3><p>Cloud Architect</p></div>
+    <div class="card"><h3>Irene Clark</h3><p>QA Tester</p></div>
+    <div class="card"><h3>Jack Martinez</h3><p>iOS Developer</p></div>
+    <div class="card"><h3>Kate Lewis</h3><p>Android Developer</p></div>
+    <div class="card"><h3>Leo Walker</h3><p>Database Administrator</p></div>
+    <div class="card"><h3>Mona Harris</h3><p>Technical Writer</p></div>
+    <div class="card"><h3>Nate Hall</h3><p>Scrum Master</p></div>
+    <div class="card"><h3>Olivia Young</h3><p>Graphic Designer</p></div>
+    <div class="card"><h3>Paul Allen</h3><p>Business Analyst</p></div>
+    <div class="card"><h3>Quinn Scott</h3><p>Data Scientist</p></div>
+    <div class="card"><h3>Rachel Adams</h3><p>Marketing Specialist</p></div>
+    <div class="card"><h3>Steve Baker</h3><p>Product Owner</p></div>
+    <div class="card"><h3>Tina Carter</h3><p>HR Manager</p></div>
+  </div>
+
+  <script>
+    function filterMembers() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toLowerCase();
+      const cards = document.getElementById('directory').getElementsByClassName('card');
+
+      for (let i = 0; i < cards.length; i++) {
+        const name = cards[i].getElementsByTagName('h3')[0].textContent.toLowerCase();
+        const role = cards[i].getElementsByTagName('p')[0].textContent.toLowerCase();
+
+        if (name.includes(filter) || role.includes(filter)) {
+          cards[i].style.display = '';
+        } else {
+          cards[i].style.display = 'none';
+        }
+      }
+    }
+
+    function addMember() {
+      const name = document.getElementById('newName').value.trim();
+      const role = document.getElementById('newRole').value.trim();
+
+      if (name && role) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<h3>${name}</h3><p>${role}</p>`;
+        document.getElementById('directory').appendChild(card);
+        document.getElementById('newName').value = '';
+        document.getElementById('newRole').value = '';
+      } else {
+        alert('Please enter both name and role');
+      }
+    }
+  </script>
+</body>
+</html>
